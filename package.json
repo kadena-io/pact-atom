@@ -1,0 +1,27 @@
+{
+  "name": "pact-atom",
+  "main": "./lib/init",
+  "version": "0.0.0",
+  "description": "Pact language support for Atom",
+  "keywords": [
+  ],
+  "repository": "https://github.com/kadena-io/pact-atom",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "providedServices": {
+    "linter": {
+      "versions": {
+        "1.0.0": "provideLinter"
+      }
+    }
+  },
+  "dependencies": {
+    "atom-linter": "^8.0.0",
+    "atom-package-deps": "^4.0.1"
+  },
+  "package-deps": [
+    "linter"
+  ]
+}

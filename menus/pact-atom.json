@@ -1,0 +1,26 @@
+{
+  "context-menu": {
+    "atom-text-editor": [
+      {
+        "label": "Toggle pact-atom",
+        "command": "pact-atom:toggle"
+      }
+    ]
+  },
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "pact-atom",
+          "submenu": [
+            {
+              "label": "Toggle",
+              "command": "pact-atom:toggle"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
