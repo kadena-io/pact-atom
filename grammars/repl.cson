@@ -1,13 +1,14 @@
-'scopeName': 'source.pact'
+'scopeName': 'source.pact.repl'
 'fileTypes': [
-  'pact'
+  'repl'
 ]
-'foldingStartMarker': '\\(\\s*$'
-'foldingStopMarker': '^\\s*\\)'
-'name': 'Pact'
+'name': 'Pact Repl Script'
 'patterns': [
   {
     'include': '#comment'
+  }
+  {
+    'include': '#command'
   }
   {
     'include': '#sexp'
@@ -32,6 +33,11 @@
   }
 ]
 'repository':
+  'command':
+    'match': ':(bench|entity|exec|expect|fail|load|reset|setmsg|setsigs|setstep|show|tx)\\s+$'
+    'captures':
+      '1':
+        'name': 'keyword.reserved.pact.repl.command'
   'comment':
     'captures':
       '1':
