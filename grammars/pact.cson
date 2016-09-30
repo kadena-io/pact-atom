@@ -56,7 +56,7 @@
   'reserved':
     'patterns': [
       {
-        'match': '(?<=(\\s|\\(|\\[|\\{))module|list|defun|defpact|step|use|step-with-rollback(?=(\\s|\\)|\\]|\\}))'
+        'match': '(?<=(\\s|\\(|\\[|\\{))module|list|let|defun|defpact|step|use|step-with-rollback(?=(\\s|\\)|\\]|\\}))'
         'name': 'keyword.reserved.pact'
       }
     ]
@@ -95,7 +95,7 @@
     'name': 'meta.expression.pact'
     'patterns': [
       {
-        'begin': '(?<=\\()(module|list|use|step|step-with-rollback)\\s+'
+        'begin': '(?<=\\()(module|list|use|let|step|step-with-rollback)\\s+'
         'beginCaptures':
           '1':
             'name': 'keyword.reserved.pact'
