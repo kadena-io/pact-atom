@@ -3,6 +3,10 @@ module.exports =
     pactPath:
       type: 'string'
       default: 'pact'
+    pactOptions:
+      type: 'array'
+      default: ['-r']
+
 
   activate: ->
     require('atom-package-deps').install()
@@ -10,7 +14,7 @@ module.exports =
   provideLinter: ->
     helpers = require('atom-linter')
     # regex = '.*:(?<line>\\d+):(?<col>\\d+): error: (?<message>.*)'
-    regex = '[^:]*:(?<line>\\d+):(?<col>\\d+):(?<message>.+)'
+    regex = '^[^:]*:(?<line>\\d+):(?<col>\\d+):(?<message>.+)'
     provider =
       grammarScopes: ['source.pact']
       scope: 'file'
@@ -18,7 +22,8 @@ module.exports =
       lint: (textEditor) =>
         filePath = textEditor.getPath()
         command = atom.config.get('pact-atom.pactPath') or 'pact'
-        parameters = [ filePath ]
+        prefOptions = atom.config.get('pact-atom.pactOptions') or []
+        parameters = prefOptions.concat([ filePath ])
 
         return helpers.exec(command, parameters, {stream: 'stderr'}).then (output) ->
           errors = for message in helpers.parse(output, regex, {filePath: filePath})

@@ -56,7 +56,7 @@
   'reserved':
     'patterns': [
       {
-        'match': '(?<=(\\s|\\(|\\[|\\{))module|list|let|let\\*|defun|defpact|step|use|step-with-rollback(?=(\\s|\\)|\\]|\\}))'
+        'match': '(?<=(\\s|\\(|\\[|\\{))module|list|let|let\\*|defun|defpact|defconst|step|use|step-with-rollback(?=(\\s|\\)|\\]|\\}))'
         'name': 'keyword.reserved.pact'
       }
     ]
@@ -109,6 +109,21 @@
       }
       {
         'begin': '(?<=\\()(defun|defpact)\\s+([\\w%#+-_&\\$@<>=\\?\\*!\\|/]+)\\s+\\([^\\)]'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.reserved.pact'
+          '2':
+            'name': 'entity.function.name.pact'
+        'end': '(?=\\))'
+        'name': 'meta.definition.global.pact'
+        'patterns': [
+          {
+            'include': '$self'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\()(defconst)\\s+([\\w%#+-_&\\$@<>=\\?\\*!\\|/]+)\\s+'
         'beginCaptures':
           '1':
             'name': 'keyword.reserved.pact'
