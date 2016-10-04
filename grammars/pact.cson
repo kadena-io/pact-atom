@@ -52,6 +52,10 @@
         'match': '(-?\\d+)'
         'name': 'constant.numeric.integer.pact'
       }
+      {
+        'match': '(:=)'
+        'name': 'constant.language.binder.pact'
+      }
     ]
   'reserved':
     'patterns': [

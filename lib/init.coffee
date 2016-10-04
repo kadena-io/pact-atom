@@ -16,7 +16,7 @@ module.exports =
     # regex = '.*:(?<line>\\d+):(?<col>\\d+): error: (?<message>.*)'
     regex = '^[^:]*:(?<line>\\d+):(?<col>\\d+):(?<message>.+)'
     provider =
-      grammarScopes: ['source.pact']
+      grammarScopes: ['source.pact','source.pact.repl']
       scope: 'file'
       lintOnFly: true
       lint: (textEditor) =>
