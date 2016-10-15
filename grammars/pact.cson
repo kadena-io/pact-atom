@@ -1,6 +1,6 @@
 'scopeName': 'source.pact'
 'fileTypes': [
-  'pact'
+  'pact','repl'
 ]
 'foldingStartMarker': '\\(\\s*$'
 'foldingStopMarker': '^\\s*\\)'
