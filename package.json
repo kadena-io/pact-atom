@@ -5,7 +5,7 @@
   "description": "Pact language support for Atom",
   "keywords": [],
   "repository": "https://github.com/kadena-io/pact-atom",
-  "License": "BSD-3-Clause",
+  "license": "BSD-3-Clause",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
