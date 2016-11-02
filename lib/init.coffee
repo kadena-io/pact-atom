@@ -23,7 +23,7 @@ module.exports =
         filePath = textEditor.getPath()
         command = atom.config.get('pact-atom.pactPath') or 'pact'
         prefOptions = atom.config.get('pact-atom.pactOptions') or []
-        parameters = prefOptions.concat([ filePath ])
+        parameters = prefOptions.concat(["-r", filePath ])
 
         return helpers.exec(command, parameters, {stream: 'stderr'}).then (output) ->
           errors = for message in helpers.parse(output, regex, {filePath: filePath})

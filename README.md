@@ -1,3 +1,3 @@
 # pact-atom package
 
-Support for the Pact Smart Contract language in Atom editor.
+Syntax and linter for the [Pact Smart Contract language](http://kadena.io/pact).
