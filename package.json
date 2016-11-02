@@ -1,10 +1,9 @@
 {
   "name": "language-pact",
   "main": "./lib/init",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Pact language support for Atom",
-  "keywords": [
-  ],
+  "keywords": [],
   "repository": "https://github.com/kadena-io/pact-atom",
   "License": "BSD3",
   "engines": {
