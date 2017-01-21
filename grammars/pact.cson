@@ -16,6 +16,9 @@
     'include': '#reserved'
   }
   {
+    'include': '#type'
+  }
+  {
     'include': '#string'
   }
   {
@@ -60,8 +63,17 @@
   'reserved':
     'patterns': [
       {
-        'match': '(?<=(\\s|\\(|\\[|\\{))module|list|let|let\\*|defun|defpact|defconst|step|use|step-with-rollback(?=(\\s|\\)|\\]|\\}))'
+        'match': '(?<=(\\s|\\(|\\[|\\{))module|list|let|let\\*|defun|defpact|defconst|defschema|deftable|step|use|step-with-rollback(?=(\\s|\\)|\\]|\\}))'
         'name': 'keyword.reserved.pact'
+      }
+    ]
+  'type':
+    'patterns': [
+      {
+        'match': '[\\w%#+-_&\\$@<>=\\?\\*!\\|/]+:(integer|decimal|time|bool|string|list|object|value|keyset|table|\\{[\\w%#+-_&\\$@<>=\\?\\*!\\|/]+\\})'
+        'captures':
+          '1':
+            'name': 'keyword.reserved.type.pact'
       }
     ]
   'object':
@@ -127,7 +139,7 @@
         ]
       }
       {
-        'begin': '(?<=\\()(defconst)\\s+([\\w%#+-_&\\$@<>=\\?\\*!\\|/]+)\\s+'
+        'begin': '(?<=\\()(defconst|defschema|deftable)\\s+([\\w%#+-_&\\$@<>=\\?\\*!\\|/]+)\\s+'
         'beginCaptures':
           '1':
             'name': 'keyword.reserved.pact'

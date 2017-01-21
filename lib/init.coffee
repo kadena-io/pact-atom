@@ -14,7 +14,8 @@ module.exports =
   provideLinter: ->
     helpers = require('atom-linter')
     # regex = '.*:(?<line>\\d+):(?<col>\\d+): error: (?<message>.*)'
-    regex = '^[^:]*:(?<line>\\d+):(?<col>\\d+):(?<message>.+)'
+    regexW = '[^:]*:(?<line>\\d+):(?<col>\\d+):Warning:(?<message>(\\s+.*\\n)+)'
+    regexE = '[^:]*:(?<line>\\d+):(?<col>\\d+):(?<message>(\\s+.*\\n)+)'
     provider =
       grammarScopes: ['source.pact']
       scope: 'file'
@@ -26,8 +27,14 @@ module.exports =
         parameters = prefOptions.concat(["-r", filePath ])
 
         return helpers.exec(command, parameters, {stream: 'stderr'}).then (output) ->
-          errors = for message in helpers.parse(output, regex, {filePath: filePath})
-            message.type = 'error'
+          errors = for message in helpers.parse(output, regexE, {filePath: filePath})
+            message.type = 'Error'
+            r = message.range; s = r[0]; e = r[1]
+            message.range = [ [ s[0],s[1] + 1 ] , [ e[0], e[1] + 3 ] ]
             message
-
-          return errors
+          warns = for message in helpers.parse(output, regexW, {filePath: filePath})
+            message.type = 'Warning'
+            r = message.range; s = r[0]; e = r[1]
+            message.range = [ [ s[0],s[1] + 1 ] , [ e[0], e[1] + 3 ] ]
+            message
+          return errors.concat(warns)
