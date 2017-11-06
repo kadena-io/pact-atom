@@ -51,8 +51,6 @@ module.exports =
         prefOptions = atom.config.get('pact-atom.pactOptions') or []
         parameters = prefOptions.concat(["-r", filePath ])
 
-        console.log("lint: " + filePath)
-
         return helpers.exec(command, parameters, {stream: 'stderr'}).then (output) ->
           errors = for m in helpers.parse(output, regexE)
             parseToMessage('error', m)
