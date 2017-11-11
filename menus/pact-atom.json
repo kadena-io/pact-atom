@@ -2,8 +2,8 @@
   "context-menu": {
     "atom-text-editor": [
       {
-        "label": "Toggle pact-atom",
-        "command": "pact-atom:toggle"
+        "label": "Toggle trace",
+        "command": "pact-atom:toggleTrace"
       }
     ]
   },
@@ -12,11 +12,11 @@
       "label": "Packages",
       "submenu": [
         {
-          "label": "pact-atom",
+          "label": "Pact Language",
           "submenu": [
             {
-              "label": "Toggle",
-              "command": "pact-atom:toggle"
+              "label": "Toggle trace",
+              "command": "pact-atom:toggleTrace"
             }
           ]
         }

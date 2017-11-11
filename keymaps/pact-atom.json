@@ -1,5 +1,5 @@
 {
   "atom-workspace": {
-    "ctrl-alt-o": "pact-atom:toggle"
+    "ctrl-alt-t": "pact-atom:toggleTrace"
   }
 }
