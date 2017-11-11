@@ -1,7 +1,7 @@
 {
   "name": "language-pact",
   "main": "./lib/init",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Pact language support for Atom",
   "keywords": [],
   "repository": "https://github.com/kadena-io/pact-atom",
