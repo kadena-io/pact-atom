@@ -63,7 +63,7 @@
   'reserved':
     'patterns': [
       {
-        'match': '(?<=(\\s|\\(|\\[|\\{))module|list|let|let\\*|defun|defpact|defconst|defschema|deftable|step|use|step-with-rollback(?=(\\s|\\)|\\]|\\}))'
+        'match': '(?<=(\\s|\\(|\\[|\\{))module|list|let|let\\*|defun|defpact|defconst|defschema|deftable|step|use|step-with-rollback|invariant|property(?=(\\s|\\)|\\]|\\}))'
         'name': 'keyword.reserved.pact'
       }
     ]
@@ -152,6 +152,9 @@
             'include': '$self'
           }
         ]
+      }
+      {
+        'include': '#string'
       }
       {
         'include': '#reserved'
