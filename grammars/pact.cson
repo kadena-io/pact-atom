@@ -63,7 +63,7 @@
   'reserved':
     'patterns': [
       {
-        'match': '(?<=(\\s|\\(|\\[|\\{))module|list|let|let\\*|defun|defpact|defconst|defschema|deftable|step|use|step-with-rollback|invariant|property(?=(\\s|\\)|\\]|\\}))'
+        'match': '(?<=(\\s|\\(|\\[|\\{))module|list|let|let\\*|defun|defpact|defconst|defschema|deftable|step|use|step-with-rollback|invariants|properties(?=(\\s|\\)|\\]|\\}))'
         'name': 'keyword.reserved.pact'
       }
     ]
