@@ -30,14 +30,18 @@ module.exports =
     regexW = '(?<file>[^:\\n]*):(?<line>\\d+):(?<col>\\d+):Warning:(?<message>(\\s+.*\\n)+)'
     regexT = '(?<file>[^:\\n]*):(?<line>\\d+):(?<col>\\d+):Trace:(?<message>(\\s+.*\\n)+)'
     regexE = '(?<file>[^:\\n]*):(?<line>\\d+):(?<col>\\d+):(?<message>(\\s+.*\\n)+)'
-    exSize = atom.config.get('pact-atom.pactExcerptSize') or 80
+
+
+    widenRange = (r) =>
+      [[ss,sl],[es,el]] = r;
+      [[ss,sl+1],[es,el+3]]
 
     parseToMessage = (doWidth, sev, m) =>
-      [[ss,sl],[es,el]] = m.range;
       excerpt = m.text
       messageLines = m.text.split('\n')
       description = m.text
       multiline = false
+      exSize = atom.config.get('language-pact.pactExcerptSize') or 80
 
       # the message is already multiple lines
       if (messageLines.length > 0)
@@ -61,16 +65,39 @@ module.exports =
         severity: sev
         location:
           file: m.filePath
-          position: if doWidth then [ [ ss,sl + 1 ] , [ es, el + 3 ] ] else m.range
+          position: if doWidth then widenRange(m.range) else m.range
         description: description
         excerpt: excerpt
         multiline: multiline
-      [ref] = helpers.parse(m.text,' at (?<file>[^:\\n]*):(?<line>\\d+):(?<col>\\d+):')
-      if (ref)
-        message.reference =
-          file: ref.filePath
-          position: ref.range[0]
-      message
+      refs = helpers.parse(m.text,' at (?<file>[^:\\n]*):(?<line>\\d+):(?<col>\\d+):')
+      if (refs.length > 0)
+        ref = refs.slice(-1)[0]
+        if (ref.filePath == m.filePath)
+          [message]
+        else
+          message.reference =
+            file: ref.filePath
+            position: ref.range[0]
+          msg2 =
+            severity: sev
+            location:
+              file: ref.filePath
+              position: widenRange(ref.range)
+            description: description
+            excerpt: excerpt
+            multiline: false
+            reference:
+              file: m.filePath
+              position: m.range[0]
+          [message, msg2]
+      else
+        [message]
+
+    parseErrs = (stderr, re, doWidth, sev) =>
+      es = for m in helpers.parse(stderr,re)
+             parseToMessage(doWidth,sev,m)
+      [].concat.apply([],es)
+
 
     provider =
       grammarScopes: ['source.pact']
@@ -80,19 +107,16 @@ module.exports =
 
       lint: (textEditor) =>
         filePath = textEditor.getPath()
-        command = atom.config.get('pact-atom.pactPath') or 'pact'
+        command = atom.config.get('language-pact.pactPath') or 'pact'
 
         parameters = ["-r", filePath ]
         if (this.doTrace) then parameters = ["-t"].concat(parameters)
 
         return helpers.exec(command, parameters, {stream: 'both'}).then (output) ->
           { stderr: stderr } = output
-          errors = for m in helpers.parse(stderr, regexE)
-            parseToMessage(true,'error', m)
-          warns = for m in helpers.parse(stderr, regexW)
-            parseToMessage(true,'warning', m)
-          traces = for m in helpers.parse(stderr, regexT)
-            parseToMessage(false,'info', m)
+          errors = parseErrs(stderr,regexE,true,'error')
+          warns = parseErrs(stderr,regexW,true,'warning')
+          traces = parseErrs(stderr,regexT,false,'info')
           return errors.concat(warns).concat(traces)
         .catch (error) ->
           console.log error
