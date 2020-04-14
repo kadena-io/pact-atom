@@ -33,7 +33,11 @@
   {
     'include': '#symbol'
   }
+  {
+    'include': '#metas'
+  }
 ]
+
 'repository':
   'comment':
     'captures':
@@ -48,29 +52,41 @@
         'name': 'constant.language.boolean.pact'
       }
       {
-        'match': '(-?\\d+\\.\\d+)'
+        'match': '\\b(-?\\d+\\.\\d+)\\b'
         'name': 'constant.numeric.double.pact'
       }
       {
-        'match': '(-?\\d+)'
+        'match': '\\b(-?\\d+)\\b'
         'name': 'constant.numeric.integer.pact'
       }
       {
-        'match': '(:=)'
+        'match': '(:=?)'
         'name': 'constant.language.binder.pact'
       }
     ]
   'reserved':
     'patterns': [
       {
-        'match': '(?<=(\\s|\\(|\\[|\\{))module|list|let|let\\*|defun|defpact|defconst|defschema|deftable|step|use|step-with-rollback|invariants?|properties|property(?=(\\s|\\)|\\]|\\}))'
+        'match':
+          '\\b(' +
+          'module|interface|list|let|let\\*|' +
+          'defun|defpact|defconst|defschema|deftable|defcap|' +
+          'step|use|step-with-rollback|' +
+          'invariants?|properties|property|defproperty|' +
+          'bless|implements' +
+          ')\\b'
         'name': 'keyword.reserved.pact'
       }
     ]
   'type':
     'patterns': [
       {
-        'match': '[\\w%#+-_&\\$@<>=\\?\\*!\\|/]+:(integer|decimal|time|bool|string|list|object|value|keyset|table|\\{[\\w%#+-_&\\$@<>=\\?\\*!\\|/]+\\})'
+        'match':
+          '(?:[:])(' +
+          'integer|decimal|time|bool|string|' +
+          'list|value|keyset|guard|' +
+          '(object|table)?\\{[\\w%#+\\-\\._&\\$@<>=\\?\\*!\\|/]+\\}|' +
+          'object|table)'
         'captures':
           '1':
             'name': 'keyword.reserved.type.pact'
@@ -111,47 +127,10 @@
     'name': 'meta.expression.pact'
     'patterns': [
       {
-        'begin': '(?<=\\()(module|list|use|let|let\\*|step|step-with-rollback)\\s+'
-        'beginCaptures':
-          '1':
-            'name': 'keyword.reserved.pact'
-        'end': '(?=\\))'
-        'name': 'meta.definition.global.pact'
-        'patterns': [
-          {
-            'include': '$self'
-          }
-        ]
+        'include': '#deflam'
       }
       {
-        'begin': '(?<=\\()(defun|defpact)\\s+([\\w%#+-_&\\$@<>=\\?\\*!\\|/]+)\\s+\\([^\\)]'
-        'beginCaptures':
-          '1':
-            'name': 'keyword.reserved.pact'
-          '2':
-            'name': 'entity.function.name.pact'
-        'end': '(?=\\))'
-        'name': 'meta.definition.global.pact'
-        'patterns': [
-          {
-            'include': '$self'
-          }
-        ]
-      }
-      {
-        'begin': '(?<=\\()(defconst|defschema|deftable)\\s+([\\w%#+-_&\\$@<>=\\?\\*!\\|/]+)\\s+'
-        'beginCaptures':
-          '1':
-            'name': 'keyword.reserved.pact'
-          '2':
-            'name': 'entity.function.name.pact'
-        'end': '(?=\\))'
-        'name': 'meta.definition.global.pact'
-        'patterns': [
-          {
-            'include': '$self'
-          }
-        ]
+        'include': '#defsimple'
       }
       {
         'include': '#string'
@@ -186,21 +165,81 @@
         'include': '$self'
       }
     ]
+  'deflam':
+    'begin':
+      '(?<=\\()(defun|defpact|defcap)\\s+' +
+      '([\\w%#+\\-_&\\$@<>=\\?\\*!\\|/]+)'
+    'beginCaptures':
+      '1':
+        'name': 'keyword.reserved.pact'
+      '2':
+        'name': 'entity.function.name.pact'
+    'name': 'meta.definition.global.pact'
+    'end': '\\)'
+    'patterns': [
+      {
+        'include': '#arglist'
+      }
+      {
+        'include': '#type'
+      }
+    ]
+  'arglist':
+    'begin': '(?<=\\()'
+    'end': '(?=\\))'
+    'patterns': [
+      {
+        'include': '#type'
+      }
+      {
+        'include': '#type'
+      }
+    ]
+  'defsimple':
+    'begin':
+      '(?<=\\()(defconst|defschema|deftable|module|interface)' +
+      '\\s+([\\w%#+-_&\\$@<>=\\?\\*!\\|/]+)\\b'
+    'beginCaptures':
+      '1':
+        'name': 'keyword.reserved.pact'
+      '2':
+        'name': 'entity.function.name.pact'
+    'end': '(?=\\))'
+    'name': 'meta.definition.global.pact'
+    'patterns': [
+      {
+        'include': '$self'
+      }
+    ]
   'string':
     'begin': '(?<!\\\\)(")'
     'beginCaptures':
       '1':
         'name': 'punctuation.definition.string.begin.pact'
-    'end': '(")'
+    'end': '(?<!\\\\)(")'
     'endCaptures':
       '1':
         'name': 'punctuation.definition.string.end.pact'
     'name': 'string.quoted.double.pact'
+  'atom':
+    'patterns': [
+      {
+        'match': '([\\w%#+-_&\\$@<>=\\?\\*!\\|/]+)'
+      }
+    ]
   'symbol':
     'patterns': [
       {
-        'match': '([\\w\\.\\-\\_\\:\\+\\=\\>\\<\\!\\?\\*][\\w\\.\\-\\_\\:\\+\\=\\>\\<\\!\\?\\*\\d]+)'
-        'name': 'meta.symbol.pact'
+        'begin': '\''
+        'end': '(?=\\s|[,:\"\'\.])'
+        'name': 'string.quoted.symbol.pact'
+      }
+    ]
+  'metas':
+    'patterns': [
+      {
+        'match': '@\\w+'
+        'name': 'variable.language.metas.pact'
       }
     ]
   'list':
