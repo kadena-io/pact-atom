@@ -13,6 +13,9 @@ module.exports =
 
   toggleTrace: ->
     this.doTrace = !this.doTrace
+    atom.commands.dispatch(
+      atom.views.getView(atom.workspace.getActiveTextEditor()),
+      'linter:lint')
 
   activate: ->
     {CompositeDisposable} = require 'atom'
@@ -25,6 +28,7 @@ module.exports =
     this.subscriptions.dispose()
 
   provideLinter: ->
+
     helpers = require('atom-linter')
     # regex = '.*:(?<line>\\d+):(?<col>\\d+): error: (?<message>.*)'
     regexW = '(?<file>[^:\\n]*):(?<line>\\d+):(?<col>\\d+):Warning:(?<message>(\\s+.*\\n)+)'
