@@ -1,0 +1,6 @@
+
+'.source.pact':
+  'editor':
+    'commentStart': '; '
+  'autocomplete':
+    'extraWordCharacters': '-'
