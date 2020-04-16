@@ -109,6 +109,16 @@
     'name': 'meta.object.pact'
     'patterns': [
       {
+        'begin': '(:=)'
+        'beginCaptures':
+          '1':
+            'name': 'constant.binder.pact'
+        'end': '([\\w%#+\\-_&\\$@<>=\\?\\*!\\|/]+)'
+        'endCaptures':
+          '1':
+            'name': 'variable.binder.pact'
+      }
+      {
         'include': '$self'
       }
     ]
@@ -224,8 +234,8 @@
     'end': '(?=\\))'
     'patterns': [
       {
-        'match': '([\\w%#+-_&\\$@<>=\\?\\*!\\|/]+)'
-        'name': 'variable.arglist.pact'
+        'match': '([\\w%#+\\-_&\\$@<>=\\?\\*!\\|/]+)'
+        'name': 'variable.name.arg.pact'
       }
       {
         'include': '#type'
