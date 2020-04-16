@@ -36,6 +36,9 @@
   {
     'include': '#metas'
   }
+  {
+    'include': '#let'
+  }
 ]
 
 'repository':
@@ -109,6 +112,35 @@
         'include': '$self'
       }
     ]
+  'let':
+    'begin': '\\((let\\*?)\\s'
+    'beginCaptures':
+      '1':
+        'name': 'keyword.let.pact'
+    'end': '\\)'
+    'name': 'meta.let.declaration.pact'
+    'patterns': [
+      {
+        'begin': '\\('
+        'end': '(?=\\))'
+        'name': 'meta.let.bindings.pact'
+        'patterns': [
+          {
+            'begin': '\\(([\\w%#+\\-_&\\$@<>=\\?\\*!\\|/]+)\\b'
+            'beginCaptures':
+              '1':
+                'name': 'variable.let.pact'
+            'end': '\\)'
+            'name': 'meta.let.binding.pact'
+            'patterns': [
+              {
+                'include': '$self'
+              }
+            ]
+          }
+        ]
+      }
+    ]
   'sexp':
     'begin': '(\\()'
     'beginCaptures':
@@ -146,6 +178,9 @@
       }
       {
         'include': '#object'
+      }
+      {
+        'include': '#let'
       }
       {
         'include': '#sexp'
@@ -189,7 +224,8 @@
     'end': '(?=\\))'
     'patterns': [
       {
-        'include': '#type'
+        'match': '([\\w%#+-_&\\$@<>=\\?\\*!\\|/]+)'
+        'name': 'variable.arglist.pact'
       }
       {
         'include': '#type'
