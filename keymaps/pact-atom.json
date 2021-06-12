@@ -1,5 +1,6 @@
 {
   "atom-workspace": {
-    "ctrl-alt-t": "pact-atom:toggleTrace"
+    "ctrl-alt-t": "pact-atom:toggleTrace",
+    "ctrl-alt-o": "pact-atom:toggleCoverage"
   }
 }

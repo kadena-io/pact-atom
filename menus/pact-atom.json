@@ -4,6 +4,10 @@
       {
         "label": "Toggle trace",
         "command": "pact-atom:toggleTrace"
+      },
+      {
+        "label": "Toggle coverage",
+        "command": "pact-atom:toggleCoverage"
       }
     ]
   },
@@ -17,6 +21,10 @@
             {
               "label": "Toggle trace",
               "command": "pact-atom:toggleTrace"
+            },
+            {
+              "label": "Toggle coverage",
+              "command": "pact-atom:toggleCoverage"
             }
           ]
         }

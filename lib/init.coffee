@@ -9,10 +9,18 @@ module.exports =
 
   doTrace: false
 
+  doCoverage: false
+
   subscriptions: null
 
   toggleTrace: ->
     this.doTrace = !this.doTrace
+    atom.commands.dispatch(
+      atom.views.getView(atom.workspace.getActiveTextEditor()),
+      'linter:lint')
+
+  toggleCoverage: ->
+    this.doCoverage = !this.doCoverage
     atom.commands.dispatch(
       atom.views.getView(atom.workspace.getActiveTextEditor()),
       'linter:lint')
@@ -23,6 +31,8 @@ module.exports =
     me = this
     this.subscriptions.add(atom.commands.add('atom-workspace',
       {'pact-atom:toggleTrace': -> me.toggleTrace()}))
+    this.subscriptions.add(atom.commands.add('atom-workspace',
+      {'pact-atom:toggleCoverage': -> me.toggleCoverage()}))
 
   deactivate: ->
     this.subscriptions.dispose()
@@ -115,6 +125,8 @@ module.exports =
 
         parameters = ["-r", filePath ]
         if (this.doTrace) then parameters = ["-t"].concat(parameters)
+        if (this.doCoverage) then parameters = ["-c"].concat(parameters)
+        console.log(parameters)
 
         return helpers.exec(command, parameters, {stream: 'both'}).then (output) ->
           { stderr: stderr } = output
