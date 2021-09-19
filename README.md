@@ -2,5 +2,9 @@
 
 Syntax and linter for the [Pact Smart Contract language](http://kadena.io/pact).
 
-With Pact 2.3.4 and later, supports "trace" (-t on the command line) to lint the verbose output of a repl script.
-Use "Toggle trace" to enable and disable.
+Requires Pact 4.1 or later.
+
+Notes:
+ - "Pact Language" menu "Toggle trace": toggles line-by-line output tracing.
+ - "Pact Language" menu "Toggle coverage": toggles LCOV code coverage output.
+ - "lcov-info" menu "Toggle": toggles coverage UI.
