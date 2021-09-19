@@ -7,7 +7,7 @@ module.exports =
       type: 'integer'
       default: 80
 
-  doTrace: false
+  doTrace: true
 
   doCoverage: false
 
@@ -126,7 +126,7 @@ module.exports =
         parameters = ["-r", filePath ]
         if (this.doTrace) then parameters = ["-t"].concat(parameters)
         if (this.doCoverage) then parameters = ["-c"].concat(parameters)
-        console.log(parameters)
+        #console.log(parameters)
 
         return helpers.exec(command, parameters, {stream: 'both'}).then (output) ->
           { stderr: stderr } = output
@@ -135,5 +135,12 @@ module.exports =
           traces = parseErrs(stderr,regexT,false,'info')
           return errors.concat(warns).concat(traces)
         .catch (error) ->
-          console.log error
+          if (error.toString().indexOf("ENOENT") != -1)
+            error = error + " [pact tool not installed?]"
+
+          atom.notifications.addError('Error in pact linting',
+            { detail: error + "\n" +
+               "Command: " + command + " " + parameters.join(' ')
+            , dismissable: true });
+          #console.log error
           return []
