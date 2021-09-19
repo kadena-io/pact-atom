@@ -129,7 +129,7 @@ module.exports =
         if (this.doCoverage) then parameters = ["-c"].concat(parameters)
         #console.log(parameters)
 
-        return helpers.exec(command, parameters, {stream: 'both'}).then (output) ->
+        return helpers.exec(command, parameters, {stream: 'both', execOptions: {timeout: Infinity } }).then (output) ->
           { stderr: stderr } = output
           errors = parseErrs(stderr,regexE,true,'error')
           warns = parseErrs(stderr,regexW,true,'warning')
