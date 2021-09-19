@@ -27,6 +27,7 @@ module.exports =
 
   activate: ->
     {CompositeDisposable} = require 'atom'
+    require('atom-package-deps').install('language-pact')
     this.subscriptions = new CompositeDisposable()
     me = this
     this.subscriptions.add(atom.commands.add('atom-workspace',

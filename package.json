@@ -21,8 +21,8 @@
     "atom-package-deps": "5.1.0"
   },
   "package-deps": [
-    "linter:2.0.0",
-    "linter-ui-default:3.4.1",
-    "lcov-info:0.12.0"
+    "linter",
+    "linter-ui-default",
+    "lcov-info"
   ]
 }
