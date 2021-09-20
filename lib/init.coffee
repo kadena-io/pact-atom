@@ -42,24 +42,31 @@ module.exports =
 
     helpers = require('atom-linter')
     # regex = '.*:(?<line>\\d+):(?<col>\\d+): error: (?<message>.*)'
-    regexW = '(?<file>[^:\\n]*):(?<line>\\d+):(?<col>\\d+):Warning:(?<message>(\\s+.*\\n)+)'
-    regexT = '(?<file>[^:\\n]*):(?<line>\\d+):(?<col>\\d+):Trace:(?<message>(\\s+.*\\n)+)'
-    regexE = '(?<file>[^:\\n]*):(?<line>\\d+):(?<col>\\d+):(?<message>(\\s+.*\\n)+)'
-
+    regexAll = '(?<file>[^:\\n]*):(?<line>\\d+):(?<col>\\d+):((?<type>[^:]+):)?(?<message>(\\s+.*\\n)+)'
 
     widenRange = (r) =>
       [[ss,sl],[es,el]] = r;
       [[ss,sl+1],[es,el+3]]
 
-    parseToMessage = (doWidth, sev, m) =>
+    parseToMessage = (m) =>
+      #console.log(m)
       excerpt = m.text
       messageLines = m.text.split('\n')
       description = m.text
       multiline = false
       exSize = atom.config.get('language-pact.pactExcerptSize') or 80
 
+      sev = 'error'
+      doWidth = true
+      if m.type == "Trace"
+        sev = 'info'
+        doWidth = false
+      else
+        if m.type == "Warning"
+          sev = 'warning'
+
       # the message is already multiple lines
-      if (messageLines.length > 0)
+      if (messageLines.length > 1)
         excerpt = messageLines[0]
 
         # this is our slightly hacky way to format as markdown. if a line has
@@ -108,10 +115,28 @@ module.exports =
       else
         [message]
 
-    parseErrs = (stderr, re, doWidth, sev) =>
+    parseErrs = (stderr, re) =>
       es = for m in helpers.parse(stderr,re)
-             parseToMessage(doWidth,sev,m)
-      [].concat.apply([],es)
+             parseToMessage(m)
+      [].concat.apply([],es).sort(cmpSev)
+
+    cmpSev = (e,f) =>
+      es = ordSev e
+      fs = ordSev f
+      if (es < fs)
+        return -1
+      else if (es > fs)
+        return 1
+      else
+        return 0
+
+    ordSev = (e) =>
+      if (e.severity == 'warning')
+        return 1
+      else if (e.severity == 'info')
+        return 2
+      else
+        return 0
 
 
     provider =
@@ -131,10 +156,7 @@ module.exports =
 
         return helpers.exec(command, parameters, {stream: 'both', timeout: Infinity }).then (output) ->
           { stderr: stderr } = output
-          errors = parseErrs(stderr,regexE,true,'error')
-          warns = parseErrs(stderr,regexW,true,'warning')
-          traces = parseErrs(stderr,regexT,false,'info')
-          return errors.concat(warns).concat(traces)
+          parseErrs(stderr,regexAll)
         .catch (error) ->
           if (error.toString().indexOf("ENOENT") != -1)
             error = error + " [pact tool not installed?]"
