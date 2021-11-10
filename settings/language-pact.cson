@@ -4,3 +4,16 @@
     'commentStart': '; '
   'autocomplete':
     'extraWordCharacters': '-'
+  'bracket-matcher':
+    autocompleteCharacters: [
+      '()'
+      '[]'
+      '{}'
+      '""'
+      '``'
+      '“”'
+      '‘’'
+      '«»'
+      '‹›'
+      '<>'
+    ]
